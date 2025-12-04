@@ -1,0 +1,1012 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --vlc-orange: #ff8800;
+    --vlc-orange-dark: #e67700;
+    --vlc-orange-light: #ffaa33;
+    --dark-bg: #2b2b2b;
+    --darker-bg: #1e1e1e;
+    --card-bg: #3a3a3a;
+    --light-bg: #f0f0f0;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-dark: #333333;
+    --accent-color: #ff8800;
+    --accent-hover: #e67700;
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --border-color: #555555;
+    --border-radius: 4px;
+    --transition: all 0.2s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    background: var(--darker-bg);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    min-height: 50px;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo svg {
+    width: 32px;
+    height: 32px;
+}
+
+.logo svg {
+    filter: drop-shadow(0 2px 4px rgba(255, 136, 0, 0.4));
+}
+
+.app-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--vlc-orange);
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.header-btn {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.header-btn i {
+    font-size: 0.85rem;
+}
+
+.header-btn span {
+    display: inline;
+}
+
+.header-btn:hover {
+    background: var(--vlc-orange);
+    border-color: var(--vlc-orange);
+    color: white;
+}
+
+.header-btn.active {
+    background: var(--vlc-orange);
+    border-color: var(--vlc-orange);
+    color: white;
+}
+
+/* Player Container */
+.player-container {
+    flex: 1;
+    background: var(--darker-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.drop-zone {
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed rgba(255, 136, 0, 0.4);
+    border-radius: var(--border-radius);
+    margin: 0.5rem;
+    transition: var(--transition);
+    background: rgba(58, 58, 58, 0.3);
+}
+
+.drop-zone.drag-over {
+    border-color: var(--vlc-orange);
+    background: rgba(255, 136, 0, 0.1);
+    border-style: solid;
+}
+
+.drop-content {
+    text-align: center;
+    pointer-events: none;
+}
+
+.drop-content i {
+    font-size: 4rem;
+    color: var(--vlc-orange);
+    margin-bottom: 1rem;
+}
+
+.drop-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.drop-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.supported-formats {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.supported-formats span {
+    background: var(--card-bg);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+video, audio {
+    max-width: 98%;
+    max-height: 98%;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+video {
+    object-fit: contain;
+}
+
+/* Controls Panel */
+.controls-panel {
+    background: var(--darker-bg);
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 100px;
+}
+
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.time-display {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    min-width: 40px;
+    text-align: center;
+}
+
+.progress-bar-container {
+    flex: 1;
+    height: 5px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--vlc-orange);
+    border-radius: 10px;
+    pointer-events: none;
+    transition: width 0.1s linear;
+}
+
+.progress-bar-container:hover .progress-fill {
+    background: var(--vlc-orange-light);
+}
+
+/* Controls Section */
+.controls-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls-left, .controls-right {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.controls-center {
+    flex: 1;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.media-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.media-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.control-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.control-btn i {
+    font-size: 0.9rem;
+}
+
+.control-btn:hover {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.control-btn.primary {
+    background: var(--vlc-orange);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--vlc-orange-dark);
+}
+
+.control-btn.primary:hover {
+    background: var(--vlc-orange-light);
+    border-color: var(--vlc-orange-light);
+    transform: scale(1.05);
+}
+
+.control-btn.primary i {
+    font-size: 1.1rem;
+}
+
+.control-btn.primary:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(255, 136, 0, 0.5);
+}
+
+.control-btn.active {
+    color: var(--vlc-orange);
+    background: rgba(255, 136, 0, 0.2);
+    border: 1px solid var(--vlc-orange);
+}
+
+.speed-label, .time-label {
+    position: absolute;
+    bottom: -18px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.time-label {
+    font-size: 0.6rem;
+    bottom: -15px;
+}
+
+.playlist-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--vlc-orange);
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    display: none;
+}
+
+#playlistBtn {
+    position: relative;
+}
+
+/* Volume Container */
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.volume-slider-container {
+    width: 0;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.volume-container:hover .volume-slider-container {
+    width: 80px;
+}
+
+.volume-slider {
+    width: 80px;
+    height: 4px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--vlc-orange);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--vlc-orange);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+    border-left: 4px solid var(--vlc-orange);
+    border: 1px solid var(--border-color);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    min-width: 300px;
+    animation: modalPop 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-content h3 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.speed-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+}
+
+.speed-option {
+    background: var(--darker-bg);
+    border: 2px solid transparent;
+    color: var(--text-primary);
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.speed-option:hover {
+    border-color: var(--vlc-orange);
+    background: rgba(255, 136, 0, 0.1);
+}
+
+.speed-option.active {
+    background: var(--vlc-orange);
+    border-color: var(--vlc-orange);
+    color: white;
+}
+
+/* Playlist Modal */
+.playlist-content {
+    min-width: 400px;
+    max-height: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: var(--darker-bg);
+    color: var(--text-primary);
+}
+
+.playlist-items {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.empty-playlist {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.empty-playlist i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.playlist-item {
+    background: var(--darker-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playlist-item:hover {
+    background: rgba(255, 136, 0, 0.2);
+}
+
+.playlist-item.active {
+    border: 2px solid var(--vlc-orange);
+    background: rgba(255, 136, 0, 0.1);
+}
+
+.playlist-item .remove-btn {
+    background: var(--danger-color);
+    border: none;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.playlist-item:hover .remove-btn {
+    opacity: 1;
+}
+
+.playlist-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.action-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    background: var(--darker-bg);
+    color: var(--text-primary);
+}
+
+/* Settings */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: var(--darker-bg);
+    border-radius: 8px;
+}
+
+.setting-item label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.setting-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.setting-item input[type="number"] {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.5rem;
+    border-radius: 5px;
+    width: 80px;
+}
+
+/* Keyboard Shortcuts Help */
+.shortcuts-help {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1001;
+    display: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.shortcuts-help.active {
+    display: block;
+}
+
+.shortcuts-help h3 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.shortcuts-grid div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+kbd {
+    background: var(--darker-bg);
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.audio-only-mode video {
+    display: none;
+}
+
+.audio-only-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.audio-only-indicator i {
+    font-size: 5rem;
+    color: var(--vlc-orange);
+    margin-bottom: 1rem;
+}
+
+/* YouTube Styles */
+.youtube-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.youtube-input {
+    background: var(--darker-bg);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    transition: var(--transition);
+}
+
+.youtube-input:focus {
+    outline: none;
+    border-color: var(--vlc-orange);
+    box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.1);
+}
+
+.load-youtube-btn {
+    background: var(--vlc-orange);
+    border: none;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.load-youtube-btn:hover {
+    background: var(--vlc-orange-light);
+}
+
+.youtube-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.youtube-examples small {
+    padding-left: 0.5rem;
+}
+
+#youtubePlayer {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.youtube-active .drop-zone {
+    display: none;
+}
+
+/* YouTube Audio-Only Mode */
+.youtube-audio-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+}
+
+.youtube-audio-indicator i {
+    font-size: 5rem;
+    color: var(--vlc-orange);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.youtube-audio-indicator h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.youtube-audio-indicator .yt-title {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.youtube-audio-indicator small {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Audio Visualizer */
+.audio-visualizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    height: 120px;
+    margin-bottom: 2rem;
+}
+
+.audio-visualizer .bar {
+    width: 12px;
+    height: 40%;
+    background: var(--vlc-orange);
+    border-radius: 2px;
+    transition: height 0.15s ease;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.audio-visualizer .bar:nth-child(1) { animation-delay: 0s; }
+.audio-visualizer .bar:nth-child(2) { animation-delay: 0.1s; }
+.audio-visualizer .bar:nth-child(3) { animation-delay: 0.2s; }
+.audio-visualizer .bar:nth-child(4) { animation-delay: 0.3s; }
+.audio-visualizer .bar:nth-child(5) { animation-delay: 0.4s; }
+.audio-visualizer .bar:nth-child(6) { animation-delay: 0.3s; }
+.audio-visualizer .bar:nth-child(7) { animation-delay: 0.2s; }
+.audio-visualizer .bar:nth-child(8) { animation-delay: 0.1s; }
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scaleY(0.9);
+    }
+    50% {
+        transform: scaleY(1.1);
+    }
+}
+
+/* YouTube Error Display */
+.youtube-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.youtube-error i.fa-exclamation-triangle {
+    font-size: 4rem;
+    color: var(--danger-color);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.youtube-error h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.youtube-error p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.view-youtube-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ff0000;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.view-youtube-btn:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+.try-another-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 0.5rem;
+}
+
+.try-another-btn:hover {
+    background: var(--vlc-orange);
+    border-color: var(--vlc-orange);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .header-btn span {
+        display: none;
+    }
+    
+    .header-btn {
+        padding: 0.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0.4rem 0.75rem;
+    }
+    
+    .app-name {
+        font-size: 1.1rem;
+    }
+    
+    .logo svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .header-actions {
+        gap: 0.3rem;
+    }
+    
+    .controls-panel {
+        padding: 0.5rem 0.75rem;
+        min-height: 90px;
+    }
+    
+    .controls-section {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .controls-center {
+        order: -1;
+        padding: 0;
+    }
+    
+    .controls-left, .controls-right {
+        justify-content: center;
+        gap: 0.2rem;
+    }
+    
+    .control-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .control-btn.primary {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .speed-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .shortcuts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .playlist-content {
+        min-width: 90vw;
+    }
+    
+    .drop-zone {
+        margin: 0.25rem;
+        width: calc(100% - 0.5rem);
+        height: calc(100% - 0.5rem);
+    }
+    
+    .media-title {
+        font-size: 0.8rem;
+        max-width: 250px;
+    }
+}
