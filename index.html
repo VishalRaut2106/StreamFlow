@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlow - Modern Media Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32">
+                    <!-- VLC-style cone -->
+                    <path d="M16 4 L24 28 L8 28 Z" fill="#ff8800"/>
+                    <ellipse cx="16" cy="28" rx="8" ry="2" fill="#e67700"/>
+                    <!-- White stripes -->
+                    <rect x="12" y="12" width="8" height="2" fill="white" opacity="0.8"/>
+                    <rect x="11" y="18" width="10" height="2" fill="white" opacity="0.8"/>
+                </svg>
+            </div>
+            <h1 class="app-name">StreamFlow</h1>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" id="openFileBtn">
+                <i class="fas fa-file"></i>
+                <span>File</span>
+            </button>
+            <button class="header-btn" id="openFolderBtn">
+                <i class="fas fa-folder-open"></i>
+                <span>Folder</span>
+            </button>
+            <button class="header-btn" id="youtubeBtn">
+                <i class="fab fa-youtube"></i>
+                <span>YouTube</span>
+            </button>
+            <button class="header-btn" id="audioOnlyBtn" title="Audio Only Mode">
+                <i class="fas fa-headphones"></i>
+            </button>
+            <button class="header-btn" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+        <input type="file" id="fileInput" accept="video/*,audio/*" style="display: none;">
+        <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;">
+    </header>
+
+    <!-- Main Player Area -->
+    <main class="player-container" id="playerContainer">
+        <div class="drop-zone" id="dropZone">
+            <div class="drop-content">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h2>Drop your media file here</h2>
+                <p>or click "Open File" to browse</p>
+                <div class="supported-formats">
+                    <span>MP4</span>
+                    <span>MKV</span>
+                    <span>AVI</span>
+                    <span>MP3</span>
+                    <span>WAV</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Controls Panel -->
+    <footer class="controls-panel">
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <span class="time-display" id="currentTime">0:00</span>
+            <div class="progress-bar-container">
+                <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="time-display" id="totalTime">0:00</span>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls-section">
+            <!-- Left Controls -->
+            <div class="controls-left">
+                <button class="control-btn" id="prevBtn" title="Previous (P)">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn" id="rewind10Btn" title="Rewind 10s (J)">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="control-btn primary" id="playPauseBtn" title="Play/Pause (Space/K)">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn" id="forward10Btn" title="Forward 10s (L)">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn" id="nextBtn" title="Next (N)">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+
+            <!-- Center Info -->
+            <div class="controls-center">
+                <div class="media-info" id="mediaInfo">
+                    <span class="media-title">No media loaded</span>
+                </div>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="controls-right">
+                <button class="control-btn" id="repeatBtn" title="Repeat (R)">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn" id="shuffleBtn" title="Shuffle (S)">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button class="control-btn" id="speedBtn" title="Speed">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="speed-label">1x</span>
+                </button>
+                <div class="volume-container">
+                    <button class="control-btn" id="volumeBtn" title="Mute (M)">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <div class="volume-slider-container">
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                    </div>
+                </div>
+                <button class="control-btn" id="playlistBtn" title="Playlist (Q)">
+                    <i class="fas fa-list"></i>
+                    <span class="playlist-count">0</span>
+                </button>
+                <button class="control-btn" id="fullscreenBtn" title="Fullscreen (F)">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Speed Control Modal -->
+    <div class="modal" id="speedModal">
+        <div class="modal-content">
+            <h3>Playback Speed</h3>
+            <div class="speed-options">
+                <button class="speed-option" data-speed="0.25">0.25x</button>
+                <button class="speed-option" data-speed="0.5">0.5x</button>
+                <button class="speed-option" data-speed="0.75">0.75x</button>
+                <button class="speed-option active" data-speed="1">1x</button>
+                <button class="speed-option" data-speed="1.25">1.25x</button>
+                <button class="speed-option" data-speed="1.5">1.5x</button>
+                <button class="speed-option" data-speed="1.75">1.75x</button>
+                <button class="speed-option" data-speed="2">2x</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playlist Modal -->
+    <div class="modal" id="playlistModal">
+        <div class="modal-content playlist-content">
+            <div class="modal-header">
+                <h3>Playlist</h3>
+                <div class="playlist-actions">
+                    <button class="action-btn" id="clearPlaylistBtn" title="Clear All">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="action-btn" id="sortPlaylistBtn" title="Sort A-Z">
+                        <i class="fas fa-sort-alpha-down"></i>
+                    </button>
+                    <button class="close-btn" id="closePlaylist">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="playlist-items" id="playlistItems">
+                <div class="empty-playlist">
+                    <i class="fas fa-music"></i>
+                    <p>No items in playlist</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-btn" id="closeSettings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="autoplayNext"> 
+                        Autoplay next in playlist
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="rememberVolume" checked> 
+                        Remember volume level
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="showNotifications" checked> 
+                        Show notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="skipDuration">Skip duration (seconds):</label>
+                    <input type="number" id="skipDuration" value="10" min="5" max="60">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube Modal -->
+    <div class="modal" id="youtubeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Load YouTube Video</h3>
+                <button class="close-btn" id="closeYoutube">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="youtube-input-container">
+                <input type="text" id="youtubeUrlInput" placeholder="Paste YouTube URL or Video ID" class="youtube-input">
+                <button class="load-youtube-btn" id="loadYoutubeBtn">
+                    <i class="fab fa-youtube"></i> Load Video
+                </button>
+                <div class="youtube-examples">
+                    <small>Examples:</small>
+                    <small>• https://www.youtube.com/watch?v=dQw4w9WgXcQ</small>
+                    <small>• https://youtu.be/dQw4w9WgXcQ</small>
+                    <small>• dQw4w9WgXcQ</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Help -->
+    <div class="shortcuts-help" id="shortcutsHelp">
+        <h3>Keyboard Shortcuts</h3>
+        <div class="shortcuts-grid">
+            <div><kbd>Space</kbd> / <kbd>K</kbd> Play/Pause</div>
+            <div><kbd>←</kbd> Rewind 5s</div>
+            <div><kbd>→</kbd> Forward 5s</div>
+            <div><kbd>J</kbd> Rewind 10s</div>
+            <div><kbd>L</kbd> Forward 10s</div>
+            <div><kbd>↑</kbd> Volume Up</div>
+            <div><kbd>↓</kbd> Volume Down</div>
+            <div><kbd>M</kbd> Mute/Unmute</div>
+            <div><kbd>F</kbd> Fullscreen</div>
+            <div><kbd>P</kbd> Previous</div>
+            <div><kbd>N</kbd> Next</div>
+            <div><kbd>R</kbd> Repeat</div>
+            <div><kbd>S</kbd> Shuffle</div>
+            <div><kbd>Q</kbd> Playlist</div>
+            <div><kbd>Shift + &gt;</kbd> Speed Up</div>
+            <div><kbd>Shift + &lt;</kbd> Speed Down</div>
+            <div><kbd>0-9</kbd> Jump to %</div>
+            <div><kbd>?</kbd> Show/Hide Help</div>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>
